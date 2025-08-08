@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>チームみらいサポーター記事一覧</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans JP", sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 10px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #dee2e6;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-pills {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-pill {
+            padding: 8px 16px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-pill:hover, .nav-pill.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .content {
+            padding: 30px 20px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            color: #667eea;
+            flex: 1;
+        }
+
+        .section-count {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+
+        h3 {
+            font-size: 1.3em;
+            color: #764ba2;
+            margin: 20px 0 15px;
+            padding-left: 10px;
+            border-left: 4px solid #764ba2;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+        }
+
+        .card-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 5px;
+            line-height: 1.4;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 0.9em;
+            opacity: 0.95;
+        }
+
+        .card-author {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .author-icon {
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            color: #667eea;
+        }
+
+        .card-type {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.85em;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .card-summary {
+            color: #495057;
+            line-height: 1.6;
+            font-size: 0.95em;
+            max-height: 150px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .card-summary::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .card-summary::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 2px;
+        }
+
+        .card-summary::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 2px;
+        }
+
+        .card-footer {
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .card-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .card-link:hover {
+            color: #764ba2;
+        }
+
+        .filter-container {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-label {
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .filter-select {
+            padding: 6px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 0.95em;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                gap: 15px;
+            }
+
+            .stat-item {
+                padding: 8px 15px;
+            }
+
+            .nav-pills {
+                gap: 5px;
+            }
+
+            .nav-pill {
+                padding: 6px 12px;
+                font-size: 0.9em;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+            font-size: 1.1em;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #6c757d;
+            border-top: 1px solid #dee2e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>チームみらいサポーター記事一覧</h1>
+            <p class="subtitle">2025年参議院選挙 - 全国のサポーターによる活動記録</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">27</div>
+                    <div class="stat-label">総記事数</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">都道府県</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">124,000</div>
+                    <div class="stat-label">ポスター設置箇所</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">20,000+</div>
+                    <div class="stat-label">サポーター数</div>
+                </div>
+            </div>
+        </header>
+
+        <nav>
+            <div class="nav-pills">
+                <a class="nav-pill active" data-section="all">すべて</a>
+                <a class="nav-pill" data-section="poster">ポスター・マッピング</a>
+                <a class="nav-pill" data-section="tech">AI・技術開発</a>
+                <a class="nav-pill" data-section="other">その他活動</a>
+                <a class="nav-pill" data-section="regional">地方活動</a>
+            </div>
+        </nav>
+
+        <div class="content">
+            <div class="filter-container">
+                <div class="filter-group">
+                    <label class="filter-label">支援タイプ:</label>
+                    <select class="filter-select" id="typeFilter">
+                        <option value="">すべて</option>
+                        <option value="ポスター">ポスター配布</option>
+                        <option value="技術">技術開発</option>
+                        <option value="デザイン">デザイン</option>
+                        <option value="動画">動画・PV</option>
+                        <option value="一般">一般サポート</option>
+                    </select>
+                </div>
+                <div class="search-box">
+                    <input type="text" class="search-input" id="searchInput" placeholder="キーワードで検索...">
+                </div>
+            </div>
+
+            <div id="articlesContainer">
+                <!-- JavaScript で動的に生成 -->
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2025 チームみらい - すべての記事は各執筆者による個人的な体験記です</p>
+        </footer>
+    </div>
+
+    <script>
+        const articles = [
+            // ポスター配布・マッピング関連
+            {
+                category: 'poster',
+                region: '全国',
+                type: 'ポスターマップ',
+                title: '【参院選】チームみらいのポスターマップ新旧比較！',
+                url: 'https://note.com/banbiossa/n/n2b5ce6cecc7f',
+                author: 'banbiossa',
+                summary: '70代プログラマーのbanbiossaが執筆。チームみらいのポスター掲示戦略の大幅な拡大について記述。都知事選では東京の14,000箇所にポスターを設置したが、参院選では12都道府県の約124,000箇所に拡大。ポスター掲示板マップシステムを開発し、ボランティアが設置状況を報告できるゲーミフィケーション的アプローチを採用。全14,076箇所の掲示場所の体系的なカバーを目指し、12万枚のポスター設置を目標とした。ボランティア主導で約1000万円相当の作業を実現。技術とキャンペーン戦略、ボランティア参加を組み合わせた革新的なアプローチで、透明性のある選挙活動を展開。全国規模での草の根政治活動の新しいモデルを確立した画期的な取り組み。'
+            },
+            {
+                category: 'poster',
+                region: '全国',
+                type: 'ポスターマップ開発',
+                title: '参院選 チームみらい:ポスターマップ──12万枚の挑戦、その軌跡と手応え',
+                url: 'https://note.com/gifted_panda752/n/nf9eaa6e2a4d4',
+                author: '喜寿プログラマ🎈',
+                summary: '喜寿プログラマによるポスターマップシステム開発の詳細記録。参院選でのチームみらいの12万枚ポスター配布という前例のない挑戦を技術的に支援。全国14,076箇所の掲示板データを管理し、ゲーミフィケーションを活用した配布システムを構築。スタンプラリー形式でボランティアが楽しみながら参加できる仕組みを実装。リアルタイムでの進捗可視化により、全国のボランティアのモチベーション維持に貢献。高齢プログラマーとしての経験を活かし、使いやすいインターフェースを設計。「どうすれば全部にポスターを貼れるか」という課題に対し、技術とコミュニティの力を組み合わせた解決策を提示。政治活動におけるデジタル技術活用の先進事例として、今後の選挙活動に大きな影響を与える可能性のある革新的システムを実現。'
+            },
+            {
+                category: 'poster',
+                region: '全国',
+                type: 'ポスター配布',
+                title: 'チームみらいのボランティアが想像以上にアナログだった',
+                url: 'https://note.com/kaburagi367/n/n50bbc4393297',
+                author: 'かぶらぎ (Kaburagi)',
+                summary: 'かぶらぎによる草の根ボランティア活動の実態記録。全国12都道府県721自治体での手作業によるポスター配布活動を詳細に記述。都知事選で専門業者なら約1000万円かかる作業を完全ボランティアで実現した経験を踏まえ、参院選でさらに大規模な活動を展開。予想に反してアナログな手作業が中心となった活動の実際を率直に記録。デジタル技術を活用しながらも、最終的には人の手による地道な作業が不可欠だったことを指摘。各地域でのボランティア間の連携や情報共有の重要性を強調。物理的なポスター貼りという従来型の選挙活動を、新しい組織化手法で効率化した事例。技術と人力のバランスを取りながら、大規模な政治活動を成功させた貴重な体験談として、今後の市民政治活動の参考となる実践的な知見を提供。'
+            },
+            {
+                category: 'poster',
+                region: '全国',
+                type: '総合サポート',
+                title: '【参議院選挙2025】#チームみらい ★サポーター戦記',
+                url: 'https://iwakiri.hatenablog.com/entry/2025/07/23/101612',
+                author: 'IWAKIRI',
+                summary: 'IWAKIRIによる包括的な活動記録。北海道から福岡まで全国規模でのポスター配布やイベント参加を通じて、チームみらいの1議席獲得に貢献。58歳女性、病気療養中にも関わらずマッピングリーダーとして721自治体の97%のデータ収集を達成。東京都と埼玉県で計39枚のポスター貼り、複数のリアルイベントに参加。Googleフォーム、スプレッドシート、Slack、SNSを活用した効率的な活動を展開。「世界を変えるのは政治家、デベロッパー、デザイナー」という信念のもと、テクノロジーによる社会変革を実践。安野たかひろ氏の比例区当選という具体的成果を達成。個人の健康上の制約を乗り越えながら、情熱と技術を組み合わせた政治参加の新しい形を体現。全国のボランティアネットワーク構築に貢献した重要な活動記録。'
+            },
+            {
+                category: 'poster',
+                region: '全国',
+                type: 'ポスターマッピング',
+                title: 'チームみらいのポスター掲示板マップ作成のボランティアに参加してみた',
+                url: 'https://note.com/mineralwater881/n/n70b7cfd51dc1',
+                author: 'ミネラルウォーター (Mineral Water)',
+                summary: 'ミネラルウォーターによるボランティア参加体験記。2024年都知事選で安野氏が個人でポスター貼りを行う姿に感銘を受け、参院選でのマッピング活動に参加。当初は躊躇していたが、「一歩踏み出す勇気」の重要性を実感。ポスター掲示板の位置情報をデジタルマップ化する地道な作業を通じて、選挙活動の基盤づくりに貢献。東京都内の掲示板データ入力と検証作業を担当し、正確な情報管理の重要性を学習。他のボランティアとの協働を通じて、政治参加の敷居の低さを発見。個人でもできる具体的な貢献方法を見出し、民主主義プロセスへの能動的参加を実践。「誰もが政治に関われる」というチームみらいの理念を体現し、市民による政治参加の新しいモデルを示した貴重な体験談。初心者でも参加可能な政治活動の実例を提供。'
+            },
+            // AI・技術開発関連
+            {
+                category: 'tech',
+                region: '全国',
+                type: 'AI開発',
+                title: '「チームみらい」の政策質疑応答システム「AIあんの」をめちゃめちゃ紹介します',
+                url: 'https://note.com/annotakahiro24/n/n4ec669d391dd',
+                author: '#安野たかひろ スタッフ',
+                summary: '安野たかひろスタッフ（沖田氏）による「AIあんの」システムの詳細紹介。YouTubeライブ配信でリアルタイムに視聴者の質問に答える革新的な政策質疑応答システムを開発。都知事選での試験運用を経て、参院選で本格稼働。AIアバター技術とDifyプラットフォームを活用し、24時間対応可能な政治コミュニケーションツールを実現。複雑な政策内容を分かりやすく説明し、有権者との双方向対話を促進。従来の一方的な政治広報から、インタラクティブな対話型広報への転換を実現。若年層を中心に高い関心を集め、政治への関心向上に貢献。技術革新による政治の透明性向上と、有権者エンゲージメントの新しい形を提示。AIと政治の融合という先進的アプローチで、日本の選挙活動に新風を吹き込んだ画期的システム。'
+            },
+            {
+                category: 'tech',
+                region: '全国',
+                type: 'AI開発',
+                title: 'チームみらいのサポーターのみんなと一緒にAIあんの作ったおはなし',
+                url: 'https://note.com/clever_otter7236/n/n8b570fce2dc8',
+                author: 'アニメ大好きハゲおじさん',
+                summary: '「アニメ大好きハゲおじさん」による「AIあんの」プロジェクト参加体験記。エンジニアとしてAIアバターシステムの開発に貢献し、技術的な課題解決に尽力。プロジェクトの初期段階から関わり、システムアーキテクチャの設計や実装を担当。チーム内での協働作業を通じて、政治×技術の新しい可能性を探求。深夜に及ぶ開発作業や技術的トラブルシューティングなど、開発現場の生々しい実態を記録。オープンソース精神で知識を共有し、他のボランティアエンジニアとの技術交流を促進。政治に興味がなかった技術者が、自身のスキルを社会貢献に活用する過程を描写。「楽しみながら社会を変える」という新しい政治参加の形を実践。技術コミュニティと政治活動の架け橋となり、エンジニアの社会的役割について新たな視座を提供した貴重な記録。'
+            },
+            {
+                category: 'tech',
+                region: '全国',
+                type: 'GIS技術',
+                title: '地図屋さんが見た、ポスター掲示板マップ開発の裏側 #チームみらい',
+                url: 'https://note.com/kym42/n/n1a899e46b5aa',
+                author: 'kym42',
+                summary: '元GIS企業勤務のkym42による専門的視点からの活動記録。地理情報システムの専門知識を活かし、ポスター掲示板マップの技術的改善に貢献。当初は観察者として都知事選のマップを分析していたが、その技術的可能性に魅力を感じ参加を決意。空間データの最適化、地図表示の高速化、ユーザビリティの向上など、専門的な改良を実施。全国124,000箇所のデータを効率的に管理・表示するシステムの構築に尽力。オープンストリートマップなどのオープンデータを活用し、コスト効率的な解決策を提案。GIS技術の民主化により、市民活動でも高度な地理情報処理が可能になることを実証。技術的専門性を政治活動に活用する新しいキャリアパスを示し、専門家の社会貢献の形を提示。地理情報技術と政治活動の融合という新領域を開拓した先駆的な取り組み。'
+            },
+            {
+                category: 'tech',
+                region: '全国',
+                type: '技術サポート',
+                title: '毎日YouTube見てお菓子食べて寝てたい怠惰系エンジニアの私がチームみらいのサポーターをする理由',
+                url: 'https://note.com/fine_cosmos748/n/nf20dd9d36c26',
+                author: 'さくらい (Sakurai)',
+                summary: 'さくらいによる率直な参加動機の記録。「毎日YouTube見てお菓子食べて寝てたい」という本音を持ちながら、「楽しそう」という単純な理由でチームみらいに参加。堅苦しい政治活動のイメージを覆し、カジュアルに参加できる新しい政治参加の形を体現。技術的なタスクを自分のペースでこなしながら、確実に貢献。リモートワークで参加可能な体制により、ライフスタイルを維持しながら社会貢献を実現。コードレビューやバグ修正など、得意分野での貢献を通じて自己実現。「完璧でなくても参加できる」というメッセージを発信し、政治参加のハードルを下げることに貢献。エンジニア文化と政治活動の融合により、新しい参加者層の開拓に成功。気軽に始められる政治参加の実例として、多くの技術者に影響を与えた体験談。'
+            },
+            // その他全国活動
+            {
+                category: 'other',
+                region: '全国',
+                type: 'PV制作',
+                title: '「チームみらい」PV製作秘話',
+                url: 'https://note.com/annotakahiro24/n/n89ae96afd794',
+                author: '#安野たかひろ スタッフ',
+                summary: 'チームみらい公式スタッフによるプロモーションビデオ製作の舞台裏記録。限られた予算と時間の中で、インパクトのあるPVを製作した過程を詳述。プロのクリエイターとボランティアの協働により、商業レベルの品質を実現。若年層にアピールする現代的な映像表現と、政策メッセージの効果的な融合を追求。撮影現場でのエピソードや、編集過程での試行錯誤を赤裸々に記録。SNSでの拡散を意識した戦略的な構成により、数百万回の再生を達成。従来の政治広告とは一線を画す、エンターテインメント性の高い作品を完成。映像による政治コミュニケーションの新しい可能性を示し、政治への関心を高めることに成功。クリエイティブ業界と政治の新しい関係性を構築し、今後の選挙活動に影響を与える先例となった革新的プロジェクト。'
+            },
+            {
+                category: 'other',
+                region: '全国',
+                type: '選挙事務',
+                title: '被選挙権を支える実務：選挙事務の全体像と振り返り',
+                url: 'https://note.com/annotakahiro24/n/ndf00fa591b92',
+                author: '#安野たかひろ スタッフ',
+                summary: '選挙管理の実務を詳細に文書化した貴重な記録。将来の候補者や選挙スタッフのための実践的マニュアルとして機能。公職選挙法の遵守から事務手続き、スケジュール管理まで包括的に記述。選挙管理委員会との調整、候補者の届出、ポスター・ビラの管理など、具体的な業務を体系化。デジタルツールを活用した効率的な事務処理方法を提案。コンプライアンスを確保しながら、ボランティアベースで運営する方法を確立。失敗事例と改善策も率直に記録し、実践的な知見を共有。選挙事務の「見える化」により、政治参加の透明性向上に貢献。新規参入者が選挙に挑戦する際の参入障壁を下げる重要な資料。民主主義の基盤となる選挙プロセスを、市民に開かれたものにする画期的な取り組み。'
+            },
+            {
+                category: 'other',
+                region: '全国',
+                type: '動画編集',
+                title: '落ちているボールを拾い続けた2ヶ月間 - チームみらい動画編集ボランティアの記録',
+                url: 'https://note.com/maesho/n/nc66d29831eeb',
+                author: 'Shota Maeda (maesho)',
+                summary: '2ヶ月間の集中的な動画編集活動を記録。「落ちているボール」つまり誰も手を付けていない作業を積極的に拾い続けた献身的な活動。日々の街頭演説やイベントの映像を、SNS用の短編動画に編集。視聴者の注意を引く最初の3秒にこだわり、エンゲージメント率の向上に貢献。Adobe Premiere ProやDaVinci Resolveを駆使し、プロフェッショナルな仕上がりを実現。深夜作業や締切との戦いなど、制作現場のリアルな苦労を記録。チーム内でのフィードバックループを確立し、品質向上のサイクルを構築。動画による政治コミュニケーションの重要性を実証し、若年層へのリーチ拡大に成功。クリエイターとしてのスキルを政治活動に活かす新しいキャリアモデルを提示。映像制作を通じた政治参加という新領域を開拓した先駆的な活動記録。'
+            },
+            {
+                category: 'other',
+                region: '全国',
+                type: 'デザイン',
+                title: '【チームみらいの裏方】 AIあんの配信画面デザイン担当しました',
+                url: 'https://note.com/toremolo_72/n/ned1bd8b66e43',
+                author: 'natsu.',
+                summary: 'デザイナーnatsu.による配信画面UI/UX設計の詳細記録。「AIあんの」のストリーミング配信において、視聴者体験を最適化するインターフェースを設計。情報階層の整理、可読性の確保、インタラクティブ要素の配置など、細部にわたる設計思想を記述。配信中のコメント表示、質問の可視化、回答状況の表示など、リアルタイム性を重視したデザインを実現。アクセシビリティに配慮し、あらゆる層の視聴者が利用できる設計を追求。A/Bテストによる継続的な改善と、ユーザーフィードバックの反映プロセスを確立。政治コンテンツに対する心理的障壁を下げる、親しみやすいビジュアルデザインを実現。デザインの力で政治参加を促進する新しいアプローチを提示。UI/UXデザインと政治コミュニケーションの融合という新領域で、重要な先例を作った革新的プロジェクト。'
+            },
+            {
+                category: 'other',
+                region: '全国',
+                type: 'ウェブ開発',
+                title: 'チームみらいと過ごした 3 ヶ月間',
+                url: 'https://note.com/muraikenta/n/nfd17e24f347a',
+                author: 'muraikenta',
+                summary: '3ヶ月間の濃密な活動を振り返る詳細な記録。4月中旬から公式ウェブサイト構築を担当し、フロントエンド開発を主導。React/Next.jsを使用した最新のウェブ技術により、高速で使いやすいサイトを実現。週末返上での開発作業、深夜の緊急対応など、スタートアップ的な働き方を体験。アジャイル開発手法を導入し、迅速な機能追加と改善を可能に。SEO最適化やパフォーマンスチューニングにより、サイト訪問者数の大幅増加を達成。自身の会社経営と並行しながら、ワークライフバランスの新しい形を模索。「なぜそんなに熱心なのか」という周囲の問いに、社会変革への情熱で応えた。技術者としての専門性を最大限に活かし、政治活動のデジタル基盤構築に貢献。ウェブ開発を通じた政治参加の実例として、多くの技術者に影響を与えた体験記。'
+            },
+            {
+                category: 'other',
+                region: '全国',
+                type: 'データ化',
+                title: '政治参加は思ったより身近だった。～チームみらい、ポスター掲示板データ化のサポーターとして～',
+                url: 'https://note.com/junyatsuta/n/na23c54ca70f7',
+                author: 'junyatsuta',
+                summary: 'データ化作業を通じて政治参加の身近さを発見した体験記。選挙管理委員会から提供された膨大なポスター掲示場情報を、使いやすいデジタルデータに変換。Excel作業から始まり、最終的にはPythonスクリプトによる自動化まで実現。単純作業と思われたデータ入力が、選挙活動の重要な基盤となることを理解。他のボランティアとの協働により、効率的な作業分担システムを構築。データの正確性が現場のボランティア活動に直結することを実感し、責任感を持って作業。政治に無関心だった自分が、具体的な作業を通じて政治プロセスの一部となる体験。「小さな貢献」が集まって大きな成果となることを実証。データ処理スキルという身近な能力で政治に貢献できることを示し、多くの人に政治参加の可能性を提示した重要な記録。'
+            },
+            {
+                category: 'other',
+                region: '全国',
+                type: 'キャンペーン活動',
+                title: '私が「チームみらい」のサポーターをする理由―未来はきっと明るい、そんな兆しが私を動かした。',
+                url: 'https://note.com/yukaina_mirai/n/n1713cc48908b',
+                author: 'yuka',
+                summary: '初めての政治活動参加を通じて希望を見出した感動的な体験記。「チームあんの」の都知事選後の振り返り方法に感銘を受け、その真摯な姿勢に共感して参加を決意。街頭演説のサポート、機関誌配布、SNSでの情報拡散など、多様な活動に従事。政治の現場で感じた人々の熱意と、変革への可能性を肌で実感。子育て世代として、次世代のために行動することの重要性を認識。失敗を恐れず挑戦するチームみらいの文化に触発され、自身も積極的に提案・実行。政治活動を通じて得た人脈と経験が、人生の転機となったことを記録。「未来はきっと明るい」という希望を持ち続けることの大切さを訴え、多くの人に勇気を与える。政治参加が個人の成長と社会変革の両方につながることを実証した、感動的な体験談。'
+            },
+            {
+                category: 'other',
+                region: '全国',
+                type: '一般サポート',
+                title: '走り抜けた参院選2025--チームみらいサポーターとして感じていたこと',
+                url: 'https://note.com/rein_mirai/n/nc69b3ae5dc68',
+                author: 'Rein',
+                summary: '参院選の70日間を「スタートアップチャレンジ」として捉えた独自の視点からの記録。ビジネスの手法を政治活動に応用し、KPIの設定、PDCAサイクルの実践など、戦略的なアプローチを展開。リーンスタートアップの考え方で、小さく始めて素早く改善する活動スタイルを確立。データドリブンな意思決定により、限られたリソースで最大の成果を追求。失敗を学習機会と捉え、継続的な改善を実現。チーム内でのアイデア共有と実験的な取り組みを推進し、イノベーティブな選挙活動を展開。ビジネスパーソンの視点から政治活動を分析し、効率化の余地を多数発見。起業家精神を持って政治に関わることの可能性を示し、新しい参加者層を開拓。政治活動とビジネスの融合という新領域で、重要な先例を作った革新的な取り組み。'
+            },
+            {
+                category: 'other',
+                region: '全国',
+                type: '一般サポート',
+                title: 'チームみらいのサポーターというゲームを楽しんでいたら知らない内に大活躍してしまっていた話',
+                url: 'https://note.com/chicchi_2025/n/ncafd81944a44',
+                author: 'ChiCChi',
+                summary: 'サポーター活動をRPGゲームのように楽しんだユニークな体験記。ポイント制やランキングなど、ゲーミフィケーション要素を活用した活動に熱中。「レベルアップ」「クエストクリア」といったゲーム用語で活動を表現し、楽しさを演出。気軽に始めた活動が、いつの間にか重要な役割を担うまでに発展。ゲーム感覚だからこそ継続でき、結果的に大きな成果を達成。他のボランティアとの「協力プレイ」により、チームワークの楽しさを体験。競争と協力のバランスが取れた環境で、モチベーションを維持。政治活動の堅苦しいイメージを払拭し、エンターテインメント性を加えることに成功。若年層の政治参加を促進する新しいアプローチとして注目。「楽しみながら社会貢献」という新しい価値観を提示し、多くの人に影響を与えた画期的な活動記録。'
+            },
+            {
+                category: 'other',
+                region: '全国',
+                type: '一般サポート',
+                title: 'チームみらいのサポーターとして活動していました。',
+                url: 'https://note.com/kumoda_ichiro/n/n3235a40d5a96',
+                author: '雲田イチロウ (Kumoda Ichiro)',
+                summary: 'AIエンジニアとしての専門性を活かした政治参加の記録。2025年5月の新党結成から参院選まで、技術面でのサポートを継続的に実施。機械学習モデルの構築、データ分析、自動化ツールの開発など、多岐にわたる技術支援を提供。政治とAIの融合という最先端領域で、実践的な成果を創出。技術的な課題解決を通じて、選挙活動の効率化と革新に貢献。オープンソースの精神で知識を共有し、技術コミュニティとの橋渡し役を担う。「稀有な人生体験」として位置づけ、技術者としての社会的責任を実践。AIの民主的な活用により、政治の透明性と効率性の向上に寄与。技術者の政治参加の新しいモデルを提示し、今後のAI時代の政治活動に重要な示唆を提供。専門性を社会貢献に活かす実例として、多くの技術者に影響を与えた。'
+            },
+            {
+                category: 'other',
+                region: '全国',
+                type: '一般サポート',
+                title: '娘に「ごめんね」と思っていた私に、チームみらいが希望をくれた',
+                url: 'https://note.com/mi_ko2600/n/n589437ece1be',
+                author: 'みい｜塾なし中学受験',
+                summary: '子育て世代の視点から政治参加の意義を訴える感動的な記録。少子高齢化社会で子どもを育てることへの不安と罪悪感から、行動を起こすことを決意。「こんな時代に産んでごめんね」という思いから、「より良い未来を作る」という前向きな姿勢への転換。現役世代の経済的負担（社会保険料、税金、物価高）に対する問題意識を原動力に活動。チームみらいとの出会いが、諦めから希望への転換点となった体験を記録。親として、市民として、できることから始める勇気の大切さを訴える。子どもたちの未来のために、今行動することの意義を実感。世代間の課題を乗り越える対話の重要性を認識し、実践。個人の不安が社会変革への原動力となることを実証。子育て世代の政治参加の重要性を示し、多くの親たちに勇気と希望を与えた貴重な体験談。'
+            },
+            // 地方活動
+            {
+                category: 'regional',
+                region: '北海道',
+                type: '地域サポート',
+                title: 'チームみらいサポーター奮闘記in十勝',
+                url: 'https://note.com/dokondodo/n/n7d9cfe94af8d',
+                author: 'むーむーちゃん (Mū-mū-chan)',
+                summary: '北海道十勝地方の畜産農家による地域密着型の活動記録。広大な北海道での選挙活動の特殊性と課題を詳細に記述。移動距離の長さ、人口密度の低さなど、都市部とは異なる環境での工夫を記録。地域コミュニティとの連携により、効率的なポスター配布網を構築。農業従事者としての視点から、地方の課題と政治の関係を考察。仕事の合間を縫っての活動により、ワークライフバランスの新しい形を模索。地方からでも全国的な政治活動に貢献できることを実証。SNSを活用した情報発信により、地域を超えた連帯を実現。北海道特有の気候条件（夏でも涼しい）を活かした、独自の活動スタイルを確立。地方在住者の政治参加のモデルケースとして、重要な示唆を提供。都市と地方の格差を乗り越える、新しい政治参加の形を提示した先駆的な記録。'
+            },
+            {
+                category: 'regional',
+                region: '宮城',
+                type: 'ポスター配布調整',
+                title: '【7月19日までの期間限定】2025年参院選　新党「チームみらい」選挙区ポスター貼り',
+                url: 'https://note.com/akirasince1989/n/n05a11fcbfba3',
+                author: 'かもみ',
+                summary: '参院選での大規模ポスター作戦の詳細な実施記録。宮城、東京、長野、愛媛を含む12都道府県での活動を統括。約111,000箇所のポスター掲示板への設置という、前例のない規模の作業を完遂。地域ごとの特性を考慮した、きめ細かな配布戦略を立案・実施。ボランティアの募集、教育、配置という人的資源管理の実践。法令遵守を徹底しながら、効率的な作業を実現するためのマニュアル作成。リアルタイムでの進捗管理システムにより、全国の活動を一元的に把握。地域間の情報共有により、ベストプラクティスの水平展開を実現。物理的な選挙活動をデジタル技術で支援する、ハイブリッド型の活動モデルを確立。大規模プロジェクトマネジメントの実例として、貴重な知見を提供。草の根活動を組織化する新しい手法を開発し、今後の選挙活動に大きな影響を与えた。'
+            },
+            {
+                category: 'regional',
+                region: '埼玉',
+                type: 'ポスター配布',
+                title: 'チームみらいポスター貼りマニュアル【埼玉版】',
+                url: 'https://note.com/tempra_otoko/n/n47062c6060b5',
+                author: 'くじら #あんののみらい (Kujira)',
+                summary: '埼玉県に特化した実践的なポスター貼りマニュアルを作成。地域の特性、規制、効果的な配置場所など、具体的なノウハウを体系化。法令遵守のための詳細なチェックリストを作成し、トラブル防止に貢献。効率的なルート設計により、限られた時間で最大の成果を達成する方法を確立。天候対策、道具の選定、安全確保など、現場での実践的なアドバイスを網羅。初心者でも迷わず作業できる、ステップバイステップのガイドを提供。写真付きの詳細な説明により、視覚的にも分かりやすいマニュアルを実現。地元ボランティアとの連携方法、コミュニケーションのコツなども記載。失敗事例と対策を共有し、同じ過ちを繰り返さない仕組みを構築。他地域でも応用可能な汎用性の高い内容として、全国のボランティアに活用される。実践知の共有により、選挙活動の品質向上と効率化に大きく貢献した重要な資料。'
+            },
+            {
+                category: 'regional',
+                region: '東京',
+                type: 'ポスター配布',
+                title: 'チームみらい東京みねしまポスターコンプリートチャレンジ',
+                url: 'https://note.com/sugii/n/nd48f31b0d5ba',
+                author: 'のりぃ (Norii)',
+                summary: '青ヶ島を含む東京全域でのポスター配置完全制覇への挑戦記録。離島への渡航、山間部への遠征など、アクセス困難な地域も含めた完全網羅を目指す。「コンプリート」というゲーム的な目標設定により、モチベーションを維持。GPSデータによる移動記録、写真による証拠保全など、達成度を可視化。天候不順、交通機関の乱れなど、様々な困難を乗り越えた冒険譚。地域住民との交流を通じて、選挙活動の意義を再認識。都市部と過疎地域の格差を実感し、政治の役割について深く考察。個人の挑戦が、チーム全体の士気向上につながることを実証。SNSでの実況中継により、多くの人を巻き込んだムーブメントを創出。「不可能を可能にする」精神で、選挙活動の新しい可能性を示した。冒険心と社会貢献を組み合わせた、新しいタイプの政治参加を体現。'
+            },
+            {
+                category: 'regional',
+                region: '東京',
+                type: '技術サポート',
+                title: 'ただのエンジニアがなぜチームみらいのボランティアへいるのか',
+                url: 'https://note.com/quriosity/n/n54ac2b515ae1',
+                author: 'Quriosity',
+                summary: '若手エンジニアの視点から見た政治参加の意義を記録。セキュリティ専門知識を活かし、個人情報保護やシステムセキュリティの強化に貢献。東京と愛知での活動を通じて、地域による政治意識の違いを観察。同世代の政治無関心に対する問題意識から、積極的な情報発信を実施。技術コミュニティでの活動経験を政治活動に応用し、新しいネットワークを構築。オンラインとオフラインの活動を組み合わせた、ハイブリッド型の参加スタイルを確立。若者の視点から見た政治の課題と可能性について、率直な意見を提供。世代間ギャップを埋める架け橋として、重要な役割を果たす。「ただのエンジニア」から「社会を変えるエンジニア」への意識変革を体験。Z世代の政治参加のロールモデルとして、多くの若者に影響を与えた。技術と情熱を持って社会に貢献する、新しい若者像を提示した貴重な記録。'
+            },
+            {
+                category: 'regional',
+                region: '東京都多摩地区',
+                type: 'ポスター配布',
+                title: '「チームみらいサポーター大奮闘記　汗と涙と笑いのポスター空中戦！」',
+                url: 'https://note.com/k_yukkok10/n/n36c4435b95f2',
+                author: 'yukkok',
+                summary: '東京都多摩地区での協調的なポスター配布活動をユーモアを交えて記録。「立川に喫茶店あるか分からない」「立川は大都市だよ！」といった仲間との軽妙なやり取りを通じて、活動の楽しさを表現。「汗と涙と笑い」という表現通り、苦労もありながら充実感に満ちた活動を展開。地域特性を熟知した戦略的な配置により、効果的なポスター掲示を実現。チームワークの重要性を強調し、個人プレーではなく協力プレーの成果を記録。SNSでの情報共有により、リアルタイムでの連携を実現。地域住民との対話を重視し、選挙活動を通じたコミュニティ形成に貢献。困難を笑い飛ばす前向きな姿勢で、チーム全体の雰囲気作りに寄与。「空中戦」という表現で、戦略的かつダイナミックな活動を表現。楽しみながら真剣に取り組む、理想的なボランティア活動の形を体現した記録。'
+            },
+            {
+                category: 'regional',
+                region: '福岡',
+                type: '地域サポート',
+                title: 'チームみらい福岡　参院選2025の軌跡',
+                url: 'https://note.com/witty_deer880/n/nd2a2107b9894',
+                author: 'Dr.コイン (Dr. Coin)',
+                summary: '福岡での活動を総括的に振り返る重要な記録。1億円以上の資金調達と20,000人以上のサポーター獲得という具体的成果を達成。九州地方特有の政治文化を理解し、地域に根ざした活動を展開。大都市福岡から農村地域まで、多様な地域での活動を統括。地元メディアとの連携により、効果的な情報発信を実現。伝統的な選挙活動と革新的なアプローチを組み合わせた、バランスの取れた戦略を実施。九州のボランティアネットワーク構築に尽力し、持続可能な活動基盤を確立。選挙後の振り返りを通じて、成功要因と改善点を明確化。地方都市における新しい政治運動のモデルを提示。数値的成果だけでなく、質的な変化（市民の政治意識向上など）も記録。西日本における政治革新の拠点として、今後の活動への重要な示唆を提供した総括的な記録。'
+            }
+        ];
+
+        let currentSection = 'all';
+        let currentFilter = '';
+        let currentSearch = '';
+
+        function renderArticles() {
+            const container = document.getElementById('articlesContainer');
+            container.innerHTML = '';
+
+            let filteredArticles = articles;
+
+            // セクションフィルター
+            if (currentSection !== 'all') {
+                filteredArticles = filteredArticles.filter(a => a.category === currentSection);
+            }
+
+            // タイプフィルター
+            if (currentFilter) {
+                filteredArticles = filteredArticles.filter(a => 
+                    a.type.includes(currentFilter)
+                );
+            }
+
+            // 検索フィルター
+            if (currentSearch) {
+                const searchLower = currentSearch.toLowerCase();
+                filteredArticles = filteredArticles.filter(a => 
+                    a.title.toLowerCase().includes(searchLower) ||
+                    a.author.toLowerCase().includes(searchLower) ||
+                    a.summary.toLowerCase().includes(searchLower) ||
+                    a.type.toLowerCase().includes(searchLower) ||
+                    a.region.toLowerCase().includes(searchLower)
+                );
+            }
+
+            if (filteredArticles.length === 0) {
+                container.innerHTML = '<div class="no-results">該当する記事が見つかりませんでした</div>';
+                return;
+            }
+
+            // カテゴリーごとにグループ化
+            const grouped = {};
+            filteredArticles.forEach(article => {
+                const key = article.category;
+                if (!grouped[key]) {
+                    grouped[key] = {
+                        title: getCategoryTitle(key),
+                        articles: []
+                    };
+                }
+                grouped[key].articles.push(article);
+            });
+
+            // 各カテゴリーをレンダリング
+            Object.entries(grouped).forEach(([key, group]) => {
+                const section = document.createElement('div');
+                section.className = 'section active';
+                
+                const header = document.createElement('div');
+                header.className = 'section-header';
+                header.innerHTML = `
+                    <h2>${group.title}</h2>
+                    <span class="section-count">${group.articles.length}件</span>
+                `;
+                section.appendChild(header);
+
+                const grid = document.createElement('div');
+                grid.className = 'cards-grid';
+
+                group.articles.forEach(article => {
+                    const card = createCard(article);
+                    grid.appendChild(card);
+                });
+
+                section.appendChild(grid);
+                container.appendChild(section);
+            });
+        }
+
+        function getCategoryTitle(category) {
+            const titles = {
+                'poster': 'ポスター配布・マッピング関連',
+                'tech': 'AI・技術開発関連',
+                'other': 'その他全国活動',
+                'regional': '地方活動'
+            };
+            return titles[category] || category;
+        }
+
+        function createCard(article) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="card-header">
+                    <div class="card-title">${article.title}</div>
+                    <div class="card-meta">
+                        <div class="card-author">
+                            <span class="author-icon">👤</span>
+                            <span>${article.author}</span>
+                        </div>
+                        <div class="card-type">${article.region}（${article.type}）</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card-summary">${article.summary}</div>
+                </div>
+                <div class="card-footer">
+                    <a href="${article.url}" target="_blank" class="card-link">
+                        記事を読む →
+                    </a>
+                </div>
+            `;
+            return card;
+        }
+
+        // イベントリスナー
+        document.addEventListener('DOMContentLoaded', () => {
+            // ナビゲーション
+            document.querySelectorAll('.nav-pill').forEach(pill => {
+                pill.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.querySelectorAll('.nav-pill').forEach(p => p.classList.remove('active'));
+                    e.target.classList.add('active');
+                    currentSection = e.target.dataset.section;
+                    renderArticles();
+                });
+            });
+
+            // フィルター
+            document.getElementById('typeFilter').addEventListener('change', (e) => {
+                currentFilter = e.target.value;
+                renderArticles();
+            });
+
+            // 検索
+            let searchTimeout;
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    currentSearch = e.target.value;
+                    renderArticles();
+                }, 300);
+            });
+
+            // 初期表示
+            renderArticles();
+        });
+    </script>
+</body>
+</html>
