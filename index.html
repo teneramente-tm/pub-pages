@@ -15,7 +15,7 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans JP", sans-serif;
             line-height: 1.6;
             color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #30bca7 0%, #64d8c6 100%);
             min-height: 100vh;
             padding: 20px 10px;
         }
@@ -29,17 +29,48 @@
             overflow: hidden;
         }
 
+        .lang-links {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px;
+            border-radius: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .lang-link {
+            padding: 8px 16px;
+            background: white;
+            border: 2px solid #30bca7;
+            border-radius: 20px;
+            color: #30bca7;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .lang-link:hover, .lang-link.active {
+            background: #30bca7;
+            color: #0a4d42;
+            transform: translateY(-2px);
+        }
+
         header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #30bca7 0%, #64d8c6 100%);
+            color: #0a4d42;
             padding: 40px 20px;
             text-align: center;
+            position: relative;
         }
 
         h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         .subtitle {
@@ -56,10 +87,12 @@
         }
 
         .stat-item {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.25);
             padding: 10px 20px;
             border-radius: 25px;
             backdrop-filter: blur(10px);
+            color: #0a4d42;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .stat-number {
@@ -91,9 +124,9 @@
         .nav-pill {
             padding: 8px 16px;
             background: white;
-            border: 2px solid #667eea;
+            border: 2px solid #30bca7;
             border-radius: 20px;
-            color: #667eea;
+            color: #30bca7;
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s ease;
@@ -101,10 +134,10 @@
         }
 
         .nav-pill:hover, .nav-pill.active {
-            background: #667eea;
-            color: white;
+            background: #30bca7;
+            color: #0a4d42;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 12px rgba(48, 188, 167, 0.4);
         }
 
         .content {
@@ -125,29 +158,21 @@
             align-items: center;
             margin-bottom: 25px;
             padding-bottom: 10px;
-            border-bottom: 3px solid #667eea;
+            border-bottom: 3px solid #30bca7;
         }
 
         h2 {
             font-size: 1.8em;
-            color: #667eea;
+            color: #30bca7;
             flex: 1;
         }
 
         .section-count {
-            background: #667eea;
-            color: white;
+            background: #30bca7;
+            color: #0a4d42;
             padding: 5px 15px;
             border-radius: 15px;
             font-size: 0.9em;
-        }
-
-        h3 {
-            font-size: 1.3em;
-            color: #764ba2;
-            margin: 20px 0 15px;
-            padding-left: 10px;
-            border-left: 4px solid #764ba2;
         }
 
         .cards-grid {
@@ -172,8 +197,8 @@
         }
 
         .card-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #30bca7 0%, #64d8c6 100%);
+            color: #0a4d42;
             padding: 15px;
         }
 
@@ -203,13 +228,14 @@
         .author-icon {
             width: 20px;
             height: 20px;
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             font-size: 0.8em;
-            color: #667eea;
+            color: #30bca7;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .card-type {
@@ -217,6 +243,7 @@
             padding: 3px 10px;
             border-radius: 10px;
             font-size: 0.85em;
+            border: 1px solid rgba(255, 255, 255, 0.4);
         }
 
         .card-body {
@@ -242,7 +269,7 @@
         }
 
         .card-summary::-webkit-scrollbar-thumb {
-            background: #667eea;
+            background: #30bca7;
             border-radius: 2px;
         }
 
@@ -253,7 +280,7 @@
         }
 
         .card-link {
-            color: #667eea;
+            color: #30bca7;
             text-decoration: none;
             font-weight: 500;
             display: inline-flex;
@@ -263,7 +290,7 @@
         }
 
         .card-link:hover {
-            color: #764ba2;
+            color: #64d8c6;
         }
 
         .filter-container {
@@ -311,8 +338,16 @@
 
         .search-input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #30bca7;
+            box-shadow: 0 0 0 3px rgba(48, 188, 167, 0.1);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #6c757d;
+            border-top: 1px solid #dee2e6;
         }
 
         @media (max-width: 768px) {
@@ -324,28 +359,16 @@
                 grid-template-columns: 1fr;
             }
 
-            .stats {
-                gap: 15px;
-            }
-
-            .stat-item {
-                padding: 8px 15px;
-            }
-
-            .nav-pills {
+            .lang-links {
+                top: 10px;
+                right: 10px;
                 gap: 5px;
             }
 
-            .nav-pill {
-                padding: 6px 12px;
+            .lang-link {
+                padding: 6px 10px;
                 font-size: 0.9em;
             }
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #6c757d;
         }
 
         .no-results {
@@ -354,19 +377,16 @@
             color: #6c757d;
             font-size: 1.1em;
         }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            background: #f8f9fa;
-            color: #6c757d;
-            border-top: 1px solid #dee2e6;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
+            <div class="lang-links">
+                <a href="index.html" class="lang-link active">日本語</a>
+                <a href="tm_supporter_articles_en.html" class="lang-link">English</a>
+                <a href="tm_supporter_articles_zh-tw.html" class="lang-link">繁體中文</a>
+            </div>
             <h1>チームみらいサポーター記事一覧</h1>
             <p class="subtitle">2025年参議院選挙 - 全国のサポーターによる活動記録</p>
             <div class="stats">
@@ -423,7 +443,7 @@
         </div>
 
         <footer>
-            <p>© 2025 チームみらい - すべての記事は各執筆者による個人的な体験記です</p>
+            <p>© 2025 チームみらい(非公式) - すべての記事は各執筆者による個人的な体験記です</p>
         </footer>
     </div>
 
